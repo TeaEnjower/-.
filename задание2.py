@@ -1,43 +1,60 @@
-s = 'объектно-ориентированный'
+class Polynomial:
+    def __init__(self, degree, coefficients):
+        self.degree = degree
+        self.coefficients = coefficients
 
-print(s[0:6])                                                   # объект
-print(s[9:17])                                                  # ориентир
-print(s[14:17])                                                 # тир
-print(s[9:11])                                                  # ор
-print(s[16:19])                                                 # ров
-print(s[4] + s[0] + s[5])                                       # кот
-print(s[10] + s[3] + s[6] + s[5] + s[-5])                       # рента
-print(s[5] + s[0] + s[4])                                       # ток
-print(s[0] + s[1] + s[7] + s[11])                               # обои
-print(s[10] + s[0] + s[5])                                      # рот
-print(s[5] + s[0] + s[10] + s[14])                              # торт
-print(s[-6] + s[3] + s[12] + s[-8])                             # веер
-print(s[-4:-7:-1] + s[-2] + s[4])                               # навык
-print(s[5] + s[7] + s[6])                                       # тон
-print(s[3] + s[6] + s[7] + s[5])                                # енот
-print(s[-6] + s[3] + s[6] + s[-5])                              # вена
-print(s[-6] + s[-9] + s[6] + s[-5])                             # вина
-print(s[5] + s[7] + s[6] + s[6] + s[-5])                        # тонна
-print(s[0] + s[4] + s[6] + s[7])                                # окно
-print(s[6] + s[3] + s[1] + s[7])                                # небо
-print(s[1] + s[3] + s[4] + s[7] + s[6])                         # бекон
-print(s[1] + s[3] + s[5] + s[7] + s[6])                         # бетон
-print(s[5] + s[16] + s[7] + s[6])                               # трон
-print(s[11] + s[-6] + s[-5])                                    # ива
-print(s[-6:15:-1])                                              # вор
-print(s[18:15:-1] + s[7:5:-1])                                  # ворон
-print(s[18:15:-1] + s[7:5:-1] + s[-5])                          # ворона
-print(s[6] + s[0] + s[16] + s[-5])                              # нора
-print(s[16] + s[0] + s[4])                                      # рок
-print(s[6] + s[0] + s[5] + s[-5])                               # нота
-print(s[1] + s[-5] + s[16])                                     # бар
-print(s[16] + s[-5] + s[1])                                     # раб
-print(s[16] + s[0] + s[1] + s[-5])                              # роба
-print(s[16] + s[0] + s[1] + s[7] + s[5])                        # робот
-print(s[5] + s[-9] + s[-8] + s[-5] + s[6])                      # тиран
-print(s[-6:15:-1] + s[7] + s[5])                                # ворот
-print(s[-6:15:-1] + s[7] + s[5] + s[-5])                        # ворота
-print(s[5] + s[0] + s[-6] + s[-5] + s[16])                      # товар
-print(s[5] + s[3] + s[6] + s[14])                               # тент
-print(s[10] + s[-5] + s[-8] + s[-9] + s[5] + s[3] + s[14])      # раритет
-print(s[4] + s[-5] + s[16] + s[5] + s[7] + s[6])                # картон
+    def calculate(self, x):
+        result = 0
+        for i in range(self.degree + 1):
+            result += self.coefficients[i] * (x ** i)
+        return result
+
+    def add(self, other):
+        new_degree = max(self.degree, other.degree)
+        new_coefficients = [0] * (new_degree + 1)
+        for i in range(self.degree + 1):
+            new_coefficients[i] += self.coefficients[i]
+        for i in range(other.degree + 1):
+            new_coefficients[i] += other.coefficients[i]
+        return Polynomial(new_degree, new_coefficients)
+
+    def subtract(self, other):
+        new_degree = max(self.degree, other.degree)
+        new_coefficients = [0] * (new_degree + 1)
+        for i in range(self.degree + 1):
+            new_coefficients[i] += self.coefficients[i]
+        for i in range(other.degree + 1):
+            new_coefficients[i] -= other.coefficients[i]
+        return Polynomial(new_degree, new_coefficients)
+
+    def multiply(self, other):
+        new_degree = self.degree + other.degree
+        new_coefficients = [0] * (new_degree + 1)
+        for i in range(self.degree + 1):
+            for j in range(other.degree + 1):
+                new_coefficients[i + j] += self.coefficients[i] * other.coefficients[j]
+        return Polynomial(new_degree, new_coefficients)
+
+    def display(self):
+        print("Степень многочлена:", self.degree)
+        print("Коэффициенты многочлена:", self.coefficients)
+
+
+
+p1 = Polynomial(2, [1, 2, 3])
+p2 = Polynomial(1, [2, 1])
+
+p1.display()
+p2.display()
+
+print("Значение многочлена p1 при x=2:", p1.calculate(2))
+print("Значение многочлена p2 при x=3:", p2.calculate(3))
+
+p3 = p1.add(p2)
+p3.display()
+
+p4 = p1.subtract(p2)
+p4.display()
+
+p5 = p1.multiply(p2)
+p5.display()

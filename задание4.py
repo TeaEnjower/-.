@@ -1,30 +1,27 @@
-import numpy as np
-import numpy.random as rand
-
-x = np.random.randint(3, 10)
-y = np.random.randint(3, 10)
-a = np.random.randint(0, 2, (y, x))
-P = 0
-
-print(a)
-
-for i in range(y):
-    s = 0
-for j in range(x):
-    if a[i][j] == 0:
-        s += 1
-    print('На ', i+1 ,' ряду ', s, ' мест')
-
-P += s
+class Train:
     
-print('Мест всего', y*x)
-print('Свободных мест', P)
+    def __init__(self, departure_point, destination_point, departure_time, arrival_time):
+        self.departure_point = departure_point
+        self.destination_point = destination_point
+        self.departure_time = departure_time
+        self.arrival_time = arrival_time
 
-i = int(input('Введите ряд '))
-j = int(input('Введите место '))
+    def __add__(self, other):
+        if self.destination_point == other.departure_point and self.arrival_time <= other.departure_time:
 
-if a[i-1][j-1] == 1: 
-    print('Место занято')
+            new_departure_point = self.departure_point
+            new_destination_point = other.destination_point
+            new_departure_time = self.arrival_time
+            new_arrival_time = other.arrival_time
+            return Train(new_departure_point, new_destination_point, new_departure_time, new_arrival_time)
+        else:
+            return "Невозможно сложить два поезда"
 
-else:
-    print('Место свободно')
+
+train1 = Train("Москва", "Санкт-Петербург", "10:00", "15:00")
+train2 = Train("Санкт-Петербург", "Новосибирск", "15:30", "22:00")
+
+result = train1 + train2
+
+print(result.departure_point, result.destination_point, result.departure_time, result.arrival_time)
+    
