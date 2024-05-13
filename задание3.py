@@ -1,18 +1,18 @@
-# в исходной формуле допущена ошибка: первый множитель - "1/(5**0,5)" и другая степень
+a = input('Enter the element to be folded:')
+c = 0
 
-
-def sad(n):
-    return ((((1+5**0.5)/2)**(n)-((1-5**0.5)/2)**(n))/(5**0.5))
-
-
-fib1 = 1
-fib2 = 0
-n = 1
-fib = fib1 + fib2
-while (sad(n) - fib) < 0.001:
-    print('При n =', n,'погрешность =', sad(n)-fib)
-    fib1 = fib2
-    fib2 = fib
-    fib = fib1 + fib2
-    n = n + 1
-print('При n =', n,'погрешность =', sad(n)-fib,', отклонение больше 0,001')
+while a != 0:
+    if a.isdigit():
+        c += int(a)
+        print('sum of number =', c)
+        a = input('next one: ')
+    else:
+        for i in range(len(a)):
+            b = ''
+            if a[i].isdigit():
+                b += a[i]
+                c += int(b)
+        print('sum of number =', c)
+        a = input('next one: ')
+        
+print('sum of number =', c)
