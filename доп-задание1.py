@@ -1,41 +1,52 @@
-# Так можно добавлять картинки
+with open('test.format1.txt') as f:
+    n = int(f.readline())
+    a = [tuple(map(int, i.split())) for i in f.readlines()]
 
-from IPython.display import Image # вызов из библиотеки определённой функции
-Image("операции.png")              # вызов функции и передача ей в качестве аргумента пути к файлу 
+a_set = set(a)
+neighbors = set()
+neighbors.add(a[0])
 
-# (в данном случае фаил находится в той же папке)
+poss = {}
+
+for i in a:
+    poss[i] = []
+    a, b = i
+    if (a+1, b) in a_set:
+        poss[i].append((a+1, b, 'R'))
+    if (a, b+1) in a_set:
+        poss[i].append((a, b+1, 'T'))
+    if (a-1, b) in a_set:
+        poss[i].append((a-1, b, 'L'))
+    if (a, b-1) in a_set:
+        poss[i].append((a, b-1, 'B'))
 
 
-try:
-    print('Выберите операцию:')
-    print('1) сложение')
-    print('2) умножение')
-    print('3) вычитание')
-    print('4) деление (только целочисленное): ', end = '')
-    task = int(input())
-    a, b = input('Введите два числа в произвольных ' +
-                 'системах счисления через пробел: ').split()
-    a_base, b_base = map(int, input('Введите системы счисления ' +
-                                    'чисел через пробел: ').split())
-    a_10 = int(convert_base_R(a, from_base = a_base))
-    b_10 = int(convert_base_R(b, from_base = b_base))
-    if b_10 == 0 and task == 4:
-        raise ZeroDivisionError
-    c_base = int(input('Введите систему счисления результата: '))
-    if task == 1:
-        print('Результат:', convert_base_R(a_10 + b_10, to_base = c_base))
-    elif task == 2:
-        print('Результат:', convert_base_R(a_10 * b_10, to_base = c_base))
-    elif task == 3:
-        print('Результат:', convert_base_R(a_10 - b_10, to_base = c_base))
-    elif task == 4:
-        print('Результат:', convert_base_R(a_10 // b_10, to_base = c_base))
-except ValueError:
-    print('Ошибка введенных данных.')
-    ERRMSG()
-except ZeroDivisionError:
-    print('Ошибка деления на ноль.')
-    ERRMSG()
-except IndexError:
-    print('Ошибка индекса.')
-    ERRMSG()
+def res(graph, s):
+    neigh = set()
+    neigh.add(s)
+    queue = [s]
+    ans = []
+    ans.append(' '.join(list(map(str, s))))          
+    while queue:                         
+        v = queue.pop(0)
+        c_2 = 0
+        ans_cur = ''          
+        for w in graph[v[:2]]:
+            if w[:2] not in neigh:           
+                queue.append(w)
+                ans_cur += w[2]
+                neigh.add(w[:2])
+                c_2 += 1
+        if c_2 == 0:
+            ans.append("")
+        else:
+            ans.append(ans_cur)
+
+    return ans
+
+n = res(poss, (2, 3))
+
+with open('test.format2.txt', 'w') as f:
+    ans = ',\n'.join(n)
+    f.write(ans)
+    f.write('.')
