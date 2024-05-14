@@ -1,44 +1,72 @@
-def kar():
-    spis = []
-    x = input('Введите первое число: ')
-    spis.append(x)
-    y = input('Введите второе число: ')
-    spis.append(y)
-    if len(x) <= 10 and len(y) <= 10:
-        return (int(x))*(int(y))
-    else:
-        a = len(x)
-        if a % 2 == 0:
-            mid = a / 2
-            xs, ys = str(x), str(y)
-            
-            x_list, y_list = [i for i in xs], [i for i in ys]
-            
-            first_halfX, second_halfX = x_list[: a//2], x_list[a//2 :]
-            first_halfY, second_halfY = y_list[: a//2], y_list[a//2 :]
-            
-            xq, xw = ''.join(first_halfX),''.join(second_halfX)
-            x1, x2 = int(xq), int(xw)
-            yq,yw = ''.join(first_halfY), ''.join(second_halfY)
-            y1, y2 = int(yq), int(yw)
-        elif a % 2 == 1:
-            mid = (a + 1) / 2
-            xs, ys = str(x), str(y)
-            x_list, y_list = [i for i in xs], [i for i in ys]
-            
-            x_list.append(0)
-            y_list.append(0)
-            
-            first_halfX, second_halfX = x_list[: a // 2], x_list[a // 2 :]
-            first_halfY, second_halfY = y_list[: a // 2], y_list[a // 2 :]
-            
-            second_halfX.pop()
-            second_halfY.pop()
-            xq, xw = ''.join(first_halfX),''.join(second_halfX)
-            x1, x2 = int(xq), int(xw)
-            yq,yw = ''.join(first_halfY), ''.join(second_halfY)
-            y1, y2 = int(yq), int(yw)
-    mult = x2 * y2 + ((x1 + x2) * (y1 + y2) - y1 * x1 - y2 * x2) * 10 ** mid + y1 * x1 * 10 ** (2 * mid)
-    spis.append(mult)
-    print(spis)
-    kar()
+def dijkstra(graph, start, stop = False):
+    distances = {v: float('infinity') for v in graph}
+    distances[start] = 0
+    queue = [(0, start)]
+    parents = {v: None for v in graph}
+
+    while queue:
+        current_distance, current_vertex = min(queue, key=lambda x: x[0])
+        queue.remove(min(queue, key=lambda x: x[0]))
+
+        # Обрабатываем только вершину с наименьшим расстоянием
+        if current_distance > distances[current_vertex]:
+            continue
+
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+
+            # Рассматриваем этот новый путь только в том случае, если он лучше любого пути, который мы нашли до сих пор
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                queue.append((distance, neighbor))
+                parents[neighbor] = current_vertex
+
+    if stop:
+        return distances[stop], PATH(stop, parents)
+
+    return distances, parents
+
+
+def BellmanFord(graph, start, stop=False): 
+
+	dist = {v: float('infinity') for v in graph}
+	dist[start] = 0
+	parents = {v: None for v in graph}
+
+	for n in range(len(graph)):
+		for i in graph:
+			for neighbor, w in graph[i].items():
+				if dist[i] != float("Inf") and dist[i] + w < dist[neighbor]: 
+					dist[neighbor] = dist[i] + w
+					parents[neighbor] = i
+
+	for i in graph:
+		for neighbor, w in graph[i].items():
+			if dist[i] != float("Inf") and dist[i] + w < dist[neighbor]: 
+					print("Существует отрицательный цикл")
+	if stop:
+		return dist[stop], PATH(stop, parents)
+	return dist, parents
+
+graph = {
+    't': {9: 9},
+    9: {5: 5, 7: 7},
+    5: {4: 4, 6: 6},
+    7: {6: 6, 8: 8},
+    8: {14: 14, 's': 8},
+    4: {3: 3, 13: 13},
+    3: {1: 1, 12: 12},
+    1: {2: 2, 's': 1},
+    2: {10: 10, 11: 11},
+    6: {'s': 6},
+    14: {},
+    13: {},
+    11: {},
+    10: {},
+    12: {},
+    's': {}
+}
+#получаются совершенно аналогичные ответы, значит всё работает правильно)
+print(dijkstra(graph, 't', 's'))
+print(BellmanFord(graph, 't', 's'))
+
