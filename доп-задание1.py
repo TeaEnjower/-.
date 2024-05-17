@@ -1,41 +1,55 @@
-# Так можно добавлять картинки
+class Book:
+    def __init__(self, title, author, year):
+        self.title = title
+        self.author = author
+        self.year = year
 
-from IPython.display import Image # вызов из библиотеки определённой функции
-Image("операции.png")              # вызов функции и передача ей в качестве аргумента пути к файлу 
-
-# (в данном случае фаил находится в той же папке)
+    def __repr__(self):
+        return f"Book({self.title}, {self.author}, {self.year})"
 
 
-try:
-    print('Выберите операцию:')
-    print('1) сложение')
-    print('2) умножение')
-    print('3) вычитание')
-    print('4) деление (только целочисленное): ', end = '')
-    task = int(input())
-    a, b = input('Введите два числа в произвольных ' +
-                 'системах счисления через пробел: ').split()
-    a_base, b_base = map(int, input('Введите системы счисления ' +
-                                    'чисел через пробел: ').split())
-    a_10 = int(convert_base_R(a, from_base = a_base))
-    b_10 = int(convert_base_R(b, from_base = b_base))
-    if b_10 == 0 and task == 4:
-        raise ZeroDivisionError
-    c_base = int(input('Введите систему счисления результата: '))
-    if task == 1:
-        print('Результат:', convert_base_R(a_10 + b_10, to_base = c_base))
-    elif task == 2:
-        print('Результат:', convert_base_R(a_10 * b_10, to_base = c_base))
-    elif task == 3:
-        print('Результат:', convert_base_R(a_10 - b_10, to_base = c_base))
-    elif task == 4:
-        print('Результат:', convert_base_R(a_10 // b_10, to_base = c_base))
-except ValueError:
-    print('Ошибка введенных данных.')
-    ERRMSG()
-except ZeroDivisionError:
-    print('Ошибка деления на ноль.')
-    ERRMSG()
-except IndexError:
-    print('Ошибка индекса.')
-    ERRMSG()
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def remove_book(self, book):
+        self.books.remove(book)
+
+    def find_book(self, author=None, title=None, year=None):
+        if author:
+            return [book for book in self.books if book.author == author]
+        elif title:
+            return [book for book in self.books if book.title == title]
+        elif year:
+            return [book for book in self.books if book.year == year]
+        else:
+            return self.books
+
+    def sort_books(self, field, reverse=False):
+        self.books.sort(key=lambda x: getattr(x, field), reverse=reverse)
+
+    def __repr__(self):
+        return f"Library({self.books})"
+
+
+# Примеры использования
+library = Library()
+
+book1 = Book("Война и мир", "Лев Толстой", 1869)
+book2 = Book("Преступление и наказание", "Федор Достоевский", 1866)
+book3 = Book("Отцы и дети", "Иван Тургенев", 1862)
+
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
+
+print(library.find_book(author="Лев Толстой"))
+
+library.sort_books("year")
+print(library)
+
+library.remove_book(book2)
+print(library)
