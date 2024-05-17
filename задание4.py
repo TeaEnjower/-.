@@ -1,19 +1,14 @@
-print ('Введите количество детей:')
-n = int(input())
-print ('Введите количество кубиков:')
-m = int(input())
+def ballOnStairs(init, n, step, show = False):
+    if init >= n:
+        return 0
+    if n // 2 ** step < 1:
+        return min(n // 16, n - init)
+    routes = min(n // 2 ** step, n - init)
+    for i in range(init + 1, min(init + n // 2 ** step, n) + 1):
+        if show: print(init, '->', i)
+        routes += ballOnStairs(i, n, step + 1, show)
+    return routes
 
-k = 1                                          # количество кубиков, которые вытягивают
-i = 1                                          # ход
-while m - k >= 0:
-    m = m - k
-    if 2*k > 25:
-        k = 2*k - 25
-    else:
-        k = 2*k 
-    i = i + 1
-    
-if i%n == 0:
-    print('Проиграет ребенок, ходивший', n)
-else:
-    print('Проиграет ребенок, ходивший', i%n)
+ballOnStairs(1, 4, 1, show = True)
+
+print(ballOnStairs(1, int(input('Введите n: ')), 1, show = (True if input('Показывать все возможные ходы? (y/n) ') == 'y' else False)))

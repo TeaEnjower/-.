@@ -1,18 +1,20 @@
-# в исходной формуле допущена ошибка: первый множитель - "1/(5**0,5)" и другая степень
+def isSecondSequenceASubsequence(first, second):
+    l, k = 0, 0
+    j = 0
+    i = 0
+    while i < len(first):
+        if first[i] == second[j]:
+            k = i
+            l += 1
+            i += 1
+            if j < len(second) - 1:
+                j += 1
+            elif l < len(second):
+                return False
+        else:
+            i += 1
+        if l == len(second):
+            return True
+    return False
 
-
-def sad(n):
-    return ((((1+5**0.5)/2)**(n)-((1-5**0.5)/2)**(n))/(5**0.5))
-
-
-fib1 = 1
-fib2 = 0
-n = 1
-fib = fib1 + fib2
-while (sad(n) - fib) < 0.001:
-    print('При n =', n,'погрешность =', sad(n)-fib)
-    fib1 = fib2
-    fib2 = fib
-    fib = fib1 + fib2
-    n = n + 1
-print('При n =', n,'погрешность =', sad(n)-fib,', отклонение больше 0,001')
+print('Является ли вторая последовательность подпоследовательностью первой? Ответ:', isSecondSequenceASubsequence(str(input('Введите первую последовательность: ')), str(input('Введите вторую последовательность: '))))
